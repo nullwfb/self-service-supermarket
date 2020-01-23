@@ -1,0 +1,75 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+body{
+    background-color: #e6e6e6;
+}
+#header{
+    width:100%;
+    height:78px;
+    background-color: white;
+}
+#header>div{
+    width:1200px;
+    height: 78px;
+    margin: auto;
+}
+#header>div>div{
+    float:left;
+}
+#header>div>#header_logo{
+    width:301px;
+    height: 78px;
+}
+#header>div>#header_name{
+    width:599px;
+    height: 78px;
+    line-height: 78px;
+    font-size: 32px;
+    font-style: italic;
+    font-weight: bold;
+    color:navy;
+    box-sizing: border-box;
+    padding-left: 30px;
+}
+#title{
+    width:1200px;
+    height: 35px;
+    background-color: #66afe9;
+    font-size: 16px;
+    margin: 10px auto;
+    line-height: 35px;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+#title>#left{
+    width:50%;
+    height: 35px;
+    float:left;
+}
+#title>#right{
+    width:50%;
+    height: 35px;
+    float:left;
+    text-align: right;
+}
+
+/*内容*/
+#content{
+    width:1200px;
+    height: 500px;
+    margin: auto;
+}
+#content>#content_left{
+    width:800px;
+    height: 500px;
+    background-color:#a6e1ec;
+    float:left;
+}
+#content>#content_right{
+    width:400px;
+    height: 500px;
+    background-color: #4cae4c;
+    float:left;
+}

@@ -1,0 +1,45 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>市民超市系统登录</title>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/login.basic.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+</head>
+<body>
+    <div id="title">
+        <img src="{% static 'img/logo.png' %}">
+    </div>
+    <div id="content" class="container">
+        <form class="form" action="/login/" method="post">
+				<h2 style="text-align: center;font-weight: bold;">超市进销存系统登陆</h2>
+				<hr>
+				<hr>
+				<div class="form-group">
+					<label for="user">用户名：</label>
+					<input type="text" class="form-control" placeholder="请输入用户名 -- 4位员工编号"
+                           id="user" name="login" value={{ loginId }}>
+				</div>
+				<div class="form-group">
+					<label for="password">密码：</label>
+					<input type="password" class="form-control" placeholder="请输入密码"
+                           id="password" name="password" value={{ loginPwd }}>
+				</div>
+				<div class="form-group">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox">请记住我
+						</label>
+					</div>
+				</div>
+				<input type="submit" class="form-control" value="提交" style="background-color:navy;color:aliceblue;font-weight: bold;font-size:18px">
+                <label style="font-size: 16px;color:red;margin: 10px">{{ info }}</label>
+			</form>
+    </div>
+    <div id="footer">
+        === 超市进销存系统 version:1.1.1 &nbsp;&nbsp; &nbsp; &nbsp;  版权所有：Steven Wang ===
+    </div>
+</body>
+</html>

@@ -1,0 +1,143 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查询页面</title>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/query.basic.css' %}">
+     <!-- 加载DataTables CSS文件 -->
+    <link type="text/css" rel="stylesheet" href="{% static 'extranal/datatables/css/jquery.dataTables.css' %}">
+
+    <!-- 加载DataTables 依赖的js文件 -->
+    <script src="{% static 'extranal/datatables/js/jquery.js' %}"></script>
+    <script src="{% static 'extranal/datatables/js/jquery.dataTables.js' %}"></script>
+    <style>
+        #query{
+            width:1190px;
+            height: 60px;
+            margin: 20px auto;
+            padding: 0;
+        }
+        #query>div{
+            float:left
+        }
+        #query>#query_left{
+            width:1190px;
+            height: 60px;
+            background-color: cornflowerblue;
+            padding:12px;
+        }
+        #query>#query_left>form>div{
+            float: left;
+        }
+
+
+        #content_container{
+            width:1220px;
+            margin: auto;
+        }
+
+    </style>
+    <script>
+         $(document).ready(function(){
+            $('#student').DataTable({
+                language: {
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix": "",
+                    "sSearch": "搜索:",
+                    "sUrl": "",
+                    "sEmptyTable": "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands": ",",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "上页",
+                        "sNext": "下页",
+                        "sLast": "末页"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+                },
+                "columnDefs":[
+                    {
+                        // targets用于指定操作的列，从第0列开始，-1为最后一列，这里第六列
+                        // return后边是我们希望在指定列填入的按钮代码
+                        "targets": -1,
+                        "render": function ( data, type, full, meta ) {
+                            return "<input type = 'button' class='btn btn-xs' id = 'view' value = '查看' style='background-color:navy;color:white;width:50px;'> &nbsp"
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+</head>
+<body style="background-color: #e6e6e6;">
+    <div id="header">
+        <div>
+            <div id="header_left"><img src="{% static 'img/logo.png' %}" ></div>
+            <div id="header_center">销售记录查询页面</div>
+            <div id="header_right">欢迎您！{{ username }}| <a href="{% url 'login' %} ">注销</a></div>
+        </div>
+    </div>
+    <div id="query">
+        <div id="query_left">
+            <form action="" method="post">
+                <div style="line-height: 40px;">流水单号：</div>
+                <div><input type="text" name="serialnum"  value="{{ query.serialnum }}" class="form-control" style="width:200px;margin-right: 20px;font-weight: bold;"></div>
+                <div style="line-height: 40px;">收银员：</div>
+                <div><input type="text" name="username" value="{{ query.username }}" placeholder="姓名" class="form-control" style="width:100px;margin-right: 20px;font-weight: bold;"></div>
+                <div style="line-height: 40px">起始时间：</div>
+                <div><input type="text" name="start"  value="{{ query.start }}" placeholder="0000-00-00 00:00:00" class="form-control" style="width:200px;margin-right: 20px;font-weight: bold;"></div>
+                <div style="line-height: 40px;">结束时间：</div>
+                <div><input type="text" name="end"  value="{{ query.end }}" placeholder="0000-00-00 00:00:00" class="form-control" style="width:200px;margin-right: 20px;font-weight: bold;"></div>
+                <div><input type="submit" class="btn" value="查询" style="width:100px;height:34px;background-color: navy;color:white "></div>
+            </form>
+        </div>
+    </div>
+    <div id="content_container" class="container">
+        <table class="table table-striped table-hover table-bordered" id="student" style="">
+            <thead style="background-color:cornflowerblue; color:white">
+                <tr>
+                    <th>序号</th>
+                    <th>流水单号</th>
+                    <th>商品总数</th>
+                    <th>商品总价</th>
+                    <th>收款</th>
+                    <th>找零</th>
+                    <th>收银员</th>
+                    <th>购买时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sales in sales_list %}
+                    <tr>
+                        <td style="background-color: cornflowerblue;">{{ forloop.counter }}</td>
+                        <td style="font-weight: bold;">
+                            <a href="{% url 'salesdetail_query' %}?username={{ username }}&serialnum={{ sales.0 }}" target="_blank">
+                                {{ sales.0 }}
+                            </a>
+                        </td>
+                        <td>{{ sales.1 }}</td>
+                        <td>{{ sales.2 }}</td>
+                        <td>{{ sales.3 }}</td>
+                        <td>{{ sales.4 }}</td>
+                        <td>{{ sales.5 }}</td>
+                        <td>{{ sales.6|date:"Y-m-d H:m:s" }}</td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

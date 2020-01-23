@@ -1,0 +1,130 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>明细查询页面</title>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/query.basic.css' %}">
+     <!-- 加载DataTables CSS文件 -->
+    <link type="text/css" rel="stylesheet" href="{% static 'extranal/datatables/css/jquery.dataTables.css' %}">
+
+    <!-- 加载DataTables 依赖的js文件 -->
+    <script src="{% static 'extranal/datatables/js/jquery.js' %}"></script>
+    <script src="{% static 'extranal/datatables/js/jquery.dataTables.js' %}"></script>
+    <style>
+        #query{
+            width:1190px;
+            height: 60px;
+            margin: 20px auto;
+            padding: 0;
+        }
+        #query>div{
+            float:left
+        }
+        #query>#query_left{
+            width:1190px;
+            height: 60px;
+            background-color: cornflowerblue;
+            padding:12px;
+        }
+        #query>#query_left>form>div{
+            float: left;
+        }
+
+
+        #content_container{
+            width:1220px;
+            margin: auto;
+        }
+
+    </style>
+     <script>
+         $(document).ready(function(){
+            $('#student').DataTable({
+                language: {
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix": "",
+                    "sSearch": "搜索:",
+                    "sUrl": "",
+                    "sEmptyTable": "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands": ",",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "上页",
+                        "sNext": "下页",
+                        "sLast": "末页"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+                },
+
+            });
+        });
+    </script>
+</head>
+<body style="background-color: #e6e6e6;">
+    <div id="header">
+        <div>
+            <div id="header_left"><img src="{% static 'img/logo.png' %}" ></div>
+            <div id="header_center">销售明细展示页面</div>
+            <div id="header_right">欢迎您！{{ username }}| <a href="#">注销</a></div>
+        </div>
+    </div>
+    <div id="query">
+        <div id="query_left">
+            <form action="" method="post">
+                <div style="line-height: 40px;">流水单号：</div>
+                <div><input type="text"  value="{{ serial.serialnum }}" class="form-control" style="width:200px;margin-right: 20px;font-weight: bold;"></div>
+                <div style="line-height: 40px;">商品总量：</div>
+                <div><input type="text"  value="{{ serial.totalnum }}" class="form-control" style="width:100px;margin-right: 20px;font-weight: bold;"></div>
+                <div style="line-height: 40px">商品总价：</div>
+                <div><input type="text" value="{{ serial.totalmoney }}" class="form-control" style="width:100px;margin-right: 20px;font-weight: bold;"></div>
+                <div style="line-height: 40px;">销售员：</div>
+                <div><input type="text"  value="{{ serial.username }}" class="form-control" style="width:100px;margin-right: 20px;font-weight: bold;"></div>
+                <div style="line-height: 40px;">购买时间：</div>
+                <div><input type="text" value= "{{ serial.buytime|date:'Y-m-d H:m:s' }}"  class="form-control" style="width:200px;margin-right: 20px;font-weight: bold;"></div>
+            </form>
+        </div>
+    </div>
+    <div id="content_container" class="container">
+        <table class="table table-striped table-hover table-bordered" id="student" style="">
+            <thead style="background-color:cornflowerblue; color:white">
+                <tr>
+                    <th>序号</th>
+                    <th>流水单号</th>
+                    <th>商品编号</th>
+                    <th>商品名称</th>
+                    <th>单位</th>
+                    <th>单位价格</th>
+                    <th>数量</th>
+                    <th>金额</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detail in serial.detail_list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ detail.0 }}</td>
+                        <td>{{ detail.1 }}</td>
+                        <td>{{ detail.2 }}</td>
+                        <td>{{ detail.3 }}</td>
+                        <td>{{ detail.4 }}</td>
+                        <td>{{ detail.5 }}</td>
+                        <td>{{ detail.6 }}</td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

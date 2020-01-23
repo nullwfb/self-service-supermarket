@@ -1,0 +1,127 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>收银页面</title>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/cashier.basic.css' %}">
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script>
+        $(function () {
+            $('#productbarcode').on("keydown",function (event) {
+                var keyCode = event.keyCode || event.which;
+                if(keyCode == '13'){
+                    // 获取商品的条形码
+                    barcode = $('#productbarcode').val();
+                    //展示
+                    location.href ="{% url 'add_product' %}?barcode=" + barcode;
+                }
+            });
+            $('#product_table tbody').on('click','#delete',function () {
+                //获取当前列的所有数据
+                var row = $("table#product_table tr").index($(this).closest("tr"));
+	            //获取某列（从0列开始计数）的值
+                var productId= $("table#product_table").find("tr").eq(row).find("td").eq(1).text();
+                //展示商品编号
+                location.href ="{% url 'delete_product' %}?productId=" + productId;
+            });
+            $('#receive').on("keydown",function (event) {
+                var keyCode = event.keyCode || event.which;
+                if(keyCode == '13'){
+                    // 获取商品的条形码
+                    receive = $('#receive').val();
+                    //展示
+                    location.href = "{% url 'get_return' %}?receive=" + receive;
+                }
+            });
+            $('#cancel').on('click',function () {
+                location.href = "{% url 'cashier_cancel' %}"
+            });
+            $('#submit').on('click',function () {
+                location.href = "{% url 'cashier_submit' %}"
+            });
+        })
+    </script>
+</head>
+<body style="background-color: #e6e6e6;">
+    <div id="header">
+        <div>
+            <div id="header_logo"><img src="{% static 'img/logo.png' %}" ></div>
+            <div id="header_name">前端收银结算系统</div>
+        </div>
+    </div>
+    <div id="title" style="font-size:18px;color:white;font-weight: bold;background-color: #204d74">
+        <div id="left">流水单号：{{ customer.serialnum }}</div>
+        <div id="right" >收银员：{{ username }} | <a href="{% url 'login' %}">退出</a></div>
+    </div>
+    <div id="content">
+        <div id="content_left" style="background-color:lightcyan;">
+            <table id="product_table" class="table">
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>商品编号</th>
+                        <th>商品名称</th>
+                        <th>单位</th>
+                        <th>单价</th>
+                        <th>数量</th>
+                        <th>小计</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in customer.buy_list %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ product.ProductId }}</td>
+                            <td>{{ product.ProductName }}</td>
+                            <td>{{ product.Unit }}</td>
+                            <td>{{ product.UnitPrice }}</td>
+                            <td>{{ product.Number }}</td>
+                            <td>{{ product.Money }}</td>
+                            <td><button class="btn btn-xs" style="height: 20px;background-color: navy;color:white;" id="delete">删除</button> </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div id="content_right" style= "color:white;padding: 30px;background-color: navy;">
+            <form class="form">
+                <div class="form-group">
+                    <label for="productid">商品条形码：</label>
+					<input type="text" class="form-control" placeholder="请扫描条形码" id="productbarcode" name="productbarcode"
+                           style="font-size:20px;font-weight: bold" autofocus="autofocus">
+                </div>
+                 <div class="form-group">
+                    <label for="productnumber">商品总量：</label>
+					<input type="text" class="form-control" readonly="readonly" id="totalnumber" name="totalnumber" value= "{{ customer.total_number }}"
+                           style="background-color: gray;font-size:22px;font-weight: bold;color:yellow;">
+                </div>
+                <div class="form-group">
+                    <label for="productmoney">总金额：</label>
+					<input type="text" class="form-control" readonly="readonly"  id="totalmoney" name="totalmoney" value="{{ customer.total_money }}"
+                           style="background-color: gray;font-size:22px;font-weight: bold;color:yellow;">
+                </div>
+                <div class="form-group">
+                    <label for="productmoney">收款金额：</label>
+					<input type="text" class="form-control"  value="{{ customer.receive_money }}"
+                           id="receive" name="receivemoney" style="font-size:22px;font-weight: bold">
+                </div>
+                <div class="form-group">
+                    <label for="returnmoney">找零：</label>
+					<input type="text" class="form-control"  id="return" name="returnmoney" readonly="readonly"  value="{{ customer.return_money }}"
+                           style="background-color: gray;font-size:22px;font-weight: bold;color:yellow;">
+                </div>
+                <hr style="color:white;border-width: 2px">
+                <div class="form-group">
+                    <input type="button" class="btn btn-success" value="完成" id="submit" style="width:120px;height: 50px;font-size: 28px">
+                    <input type="button" class="btn btn-default" value="取消" id="cancel"
+                           style="width:120px;height: 50px;margin-left: 90px;background-color: gray;color:white;font-size: 28px">
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

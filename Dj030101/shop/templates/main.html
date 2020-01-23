@@ -1,0 +1,37 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员主界面</title>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/main.basic.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body style="background-color: #e6e6e6;">
+     <div id="header">
+        <div>
+            <div id="header_left"><img src="{% static 'img/logo.png' %}" ></div>
+            <div id="header_center">进销存管理员主界面</div>
+            <div id="header_right">欢迎您！{{ username }} | <a href="{% url 'login' %}">注销</a></div>
+        </div>
+    </div>
+     <div id="content_container" class="container" style="margin: 40px auto">
+         {% for module in modules %}
+              <div class="col-lg-2 col-sm-3 col-xs-4" style="margin: 20px 0">
+                  <div class="thumbnail">
+                      {% with '../static/img/icons/'|add:module.3|add:'.png' as icon %}
+                          <a href="{{ module.2 }}">
+                            <img src="{{ icon }}">
+                          </a>
+                      {% endwith %}
+                  </div>
+                  <div>
+                      <a href="{{ module.2 }}">
+                         <h4 style="text-align: center">{{ module.1 }}</h4>
+                      </a>
+                  </div>
+              </div>
+         {% endfor %}
+     </div>
+</body>
+</html>
